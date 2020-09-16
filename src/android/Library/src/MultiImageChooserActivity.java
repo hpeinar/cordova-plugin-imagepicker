@@ -65,6 +65,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -627,27 +628,40 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
             finish();
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.P)
         private Bitmap _tryToGetBitmap(File file, BitmapFactory.Options options) throws IOException, OutOfMemoryError {
             Bitmap bmp = null;
-            String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DISPLAY_NAME};
+            String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DISPLAY_NAME, MediaStore.Images.ImageColumns.WIDTH, MediaStore.Images.ImageColumns.HEIGHT};
             String selection = MediaStore.Images.ImageColumns.DISPLAY_NAME + " = ?";
             String[] selectionArguments = {file.getName()};
             Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArguments, null);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
+
+                if (options != null && options.inJustDecodeBounds) {
+                    options.outWidth = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.WIDTH));
+                    options.outHeight = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.HEIGHT));
+                    cursor.close();
+
+                    return null;
+                }
+
                 Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
                 cursor.close();
-                bmp = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), imageUri));
+
+                if (options != null) {
+                    bmp = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), imageUri), new ImageDecoder.OnHeaderDecodedListener() {
+                        public void onHeaderDecoded(ImageDecoder decoder, ImageDecoder.ImageInfo info, ImageDecoder.Source source) {
+                            decoder.setTargetSampleSize(options.inSampleSize);
+                        }
+                    });
+                } else {
+                    bmp = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), imageUri));
+                }
             }
 
             if (bmp == null) {
                 throw new IOException("The image file could not be opened.");
-            }
-
-            if (options != null && options.inJustDecodeBounds) {
-                options.outWidth = bmp.getWidth();
-                options.outHeight = bmp.getHeight();
-                return null;
             }
 
             return bmp;
