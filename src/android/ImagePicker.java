@@ -40,6 +40,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.core.content.FileProvider;
+import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Base64;
 
 import org.apache.cordova.BuildHelper;
@@ -108,6 +110,8 @@ public class ImagePicker extends CordovaPlugin implements MediaScannerConnection
 
     //Where did this come from?
     private static final int CROP_CAMERA = 100;
+    private static final int PERMISSION_REQUEST_CODE = 100;
+
 
     private static final String TIME_FORMAT = "yyyyMMdd_HHmmss";
 
@@ -323,6 +327,25 @@ public class ImagePicker extends CordovaPlugin implements MediaScannerConnection
         }
 //        else
 //            LOG.d(LOG_TAG, "ERROR: You must use the CordovaInterface for this to work correctly. Please implement it in your activity");
+    }
+
+    @SuppressLint("InlinedApi")
+    private boolean hasReadPermission() {
+        return Build.VERSION.SDK_INT < 23 ||
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this.cordova.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
+    @SuppressLint("InlinedApi")
+    private void requestReadPermission() {
+        if (!hasReadPermission()) {
+            ActivityCompat.requestPermissions(
+                this.cordova.getActivity(),
+                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSION_REQUEST_CODE);
+        }
+        // This method executes async and we seem to have no known way to receive the result
+        // (that's why these methods were later added to Cordova), so simply returning ok now.
+        callbackContext.success();
     }
 
     /**
