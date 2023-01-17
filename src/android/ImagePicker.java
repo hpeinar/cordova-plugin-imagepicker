@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
-package org.apache.cordova.camera;
+package com.synconset;
 
 import android.Manifest;
 import android.app.Activity;
@@ -69,7 +69,7 @@ import java.util.Objects;
  * and returns the captured image.  When the camera view is closed, the screen displayed before
  * the camera view was shown is redisplayed.
  */
-public class CameraLauncher extends CordovaPlugin implements MediaScannerConnectionClient {
+public class ImagePicker extends CordovaPlugin implements MediaScannerConnectionClient {
 
     private static final int DATA_URL = 0;              // Return base64 encoded string
     private static final int FILE_URI = 1;              // Return file uri (content://media/external/images/media/2 for Android)
@@ -104,7 +104,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
     public static final int TAKE_PIC_SEC = 0;
     public static final int SAVE_TO_ALBUM_SEC = 1;
 
-    private static final String LOG_TAG = "CameraLauncher";
+    private static final String LOG_TAG = "ImagePicker";
 
     //Where did this come from?
     private static final int CROP_CAMERA = 100;
@@ -625,7 +625,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, getMimetypeForEncodingType());
         Uri galleryOutputUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
-        InputStream fileStream = org.apache.cordova.camera.FileHelper.getInputStreamFromUriString(imageUri.toString(), cordova);
+        InputStream fileStream = com.synconset.FileHelper.getInputStreamFromUriString(imageUri.toString(), cordova);
         writeUncompressedImage(fileStream, galleryOutputUri);
     }
 

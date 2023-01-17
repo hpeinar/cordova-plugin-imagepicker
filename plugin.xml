@@ -96,7 +96,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="ImagePicker">
-                <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
+                <param name="android-package" value="com.synconset.ImagePicker"/>
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -104,8 +104,8 @@
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
           <provider
-              android:name="org.apache.cordova.camera.FileProvider"
-              android:authorities="${applicationId}.cordova.plugin.camera.provider"
+              android:name="com.synconset.FileProvider"
+              android:authorities="${applicationId}.cordova.plugin.ImagePicker.provider"
               android:exported="false"
               android:grantUriPermissions="true" >
               <meta-data
@@ -130,11 +130,11 @@
             </intent>
         </config-file>
 
-        <source-file src="src/android/CameraLauncher.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/ExifHelper.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/FileProvider.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/GalleryPathVO.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/ImagePicker.java" target-dir="src/com/synconset" />
+        <source-file src="src/android/FileHelper.java" target-dir="src/com/synconset" />
+        <source-file src="src/android/ExifHelper.java" target-dir="src/com/synconset" />
+        <source-file src="src/android/FileProvider.java" target-dir="src/com/synconset" />
+        <source-file src="src/android/GalleryPathVO.java" target-dir="src/com/synconset" />
         <source-file src="src/android/xml/camera_provider_paths.xml" target-dir="res/xml" />
 
         <preference name="ANDROIDX_CORE_VERSION" default="1.6.+"/>
