@@ -329,13 +329,11 @@ public class ImagePicker extends CordovaPlugin implements MediaScannerConnection
 //            LOG.d(LOG_TAG, "ERROR: You must use the CordovaInterface for this to work correctly. Please implement it in your activity");
     }
 
-    @SuppressLint("InlinedApi")
     private boolean hasReadPermission() {
         return Build.VERSION.SDK_INT < 23 ||
             PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this.cordova.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
-    @SuppressLint("InlinedApi")
     private void requestReadPermission() {
         if (!hasReadPermission()) {
             ActivityCompat.requestPermissions(
