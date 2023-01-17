@@ -1,5 +1,5 @@
 {
-  "version": "2.4.4",
+  "version": "2.4.5",
   "name": "cordova-plugin-salesfloor-imagepicker",
   "cordova_name": "ImagePicker",
   "description": "This plugin allows selection of multiple images from the camera roll / gallery in a phonegap app",
