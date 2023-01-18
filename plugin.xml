@@ -2,7 +2,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="cordova-plugin-salesfloor-imagepicker"
-  version="2.4.5">
+  version="2.4.6">
 
     <name>ImagePicker</name>
 
@@ -139,10 +139,6 @@
 
         <preference name="ANDROIDX_CORE_VERSION" default="1.6.+"/>
         <framework src="androidx.core:core:$ANDROIDX_CORE_VERSION" />
-
-        <js-module src="www/android/imagepicker.js" name="ImagePicker">
-            <clobbers target="plugins.imagePicker" />
-        </js-module>
     </platform>
 
     <!-- browser -->
